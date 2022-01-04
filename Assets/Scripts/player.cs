@@ -32,17 +32,23 @@ public class player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (!bOnGround)
+        /*if (!bOnGround)
         {
-            /* if we are in the air, continue the player's forward momentum.
+            /x* if we are in the air, continue the player's forward momentum.
              That is, continue to apply the last horizontalSpeed until the
-            play is once more on the ground. */
+            play is once more on the ground. *x/
             updatePlayerPosition();
             updateCameraPosition();
         }
-        else if (Input.GetKey(KeyCode.RightArrow))
+        else*/
+        if (Input.GetKey(KeyCode.RightArrow))
         {
-            horizontalSpeed = Speed;
+            if (bOnGround)
+                horizontalSpeed = Speed;
+            else
+                horizontalSpeed += Speed * 0.01f;
+
+            horizontalSpeed = Mathf.Clamp(horizontalSpeed, -Speed, Speed);
             updatePlayerPosition();
             updateCameraPosition();
             animator.SetBool("bDirRight", true);
@@ -50,11 +56,24 @@ public class player : MonoBehaviour
         }
         else if (Input.GetKey(KeyCode.LeftArrow))
         {
-            horizontalSpeed = -Speed;
+            if (bOnGround)
+                horizontalSpeed = -Speed;
+            else
+                horizontalSpeed -= Speed * 0.01f;
+
+            horizontalSpeed = Mathf.Clamp(horizontalSpeed, -Speed, Speed);
             updatePlayerPosition();
             updateCameraPosition();
             animator.SetBool("bDirRight", false);
             animator.SetBool("bWalking", true);
+        }
+        else if (!bOnGround)
+        {
+            /* if we are in the air, continue the player's forward momentum.
+             That is, continue to apply the last horizontalSpeed until the
+            play is once more on the ground. */
+            updatePlayerPosition();
+            updateCameraPosition();
         }
         else
         {
@@ -96,6 +115,7 @@ public class player : MonoBehaviour
         GameObject otherObject = collision.gameObject;
         //Debug.Log("CollisionExit: " + otherObject.name);
 
-        if (otherObject.name == "TM Ground") bOnGround = false;
+        bOnGround = false;
+        //if (otherObject.name == "TM Ground") bOnGround = false;
     }
 }

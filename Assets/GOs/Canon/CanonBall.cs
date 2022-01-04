@@ -28,6 +28,8 @@ public class CanonBall : MonoBehaviour
             orb = Instantiate(OrbPrefab, transform.position, new Quaternion());
             Orb orbScript = orb.GetComponent<Orb>();
 
+            orb.transform.localScale = new Vector3(0.8f, 0.8f, 0.8f);
+
             orbScript.Force = Random.Range(MinFiringForce, MaxFiringForce);
             orbScript.Angle = CanonAngle;
             orbScript.OrbLife = CanonBallLife;
